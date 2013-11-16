@@ -12,6 +12,13 @@ enum type_e {
     LONG = sizeof(long)
 };
 
+enum direction_e {
+    LEFT,
+    RIGHT,
+    UP,
+    DOWN
+};
+
 typedef union {
     char ccell;
     int icell;
@@ -60,6 +67,11 @@ bool      read_cell(grid_t grid, int x, int y, bool (*cell_status)(cell_t cell))
 
 /* attempt to write 'cell' in grid, but returns false if not possible */
 int      write_cell(grid_t grid, cell_t cell, int x, int y);
+
+/* attempt to read cell that is on the 'direction' side of the specified cell
+ * */
+bool     read_cell_direc(grid_t grid, int x, int y, bool (*cell_status)(cell_t cell), dir_t direction);
+
 /* }}} */
 
 #endif

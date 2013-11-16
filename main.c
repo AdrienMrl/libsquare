@@ -7,6 +7,9 @@ char my_print(cell_t cell)
     return (cell.ccell ? 'I' : 'O');
 }
 
+/*
+** just a test/demo file
+*/
 int main(int ac, char **av)
 {
     grid_t grid = new_grid(atoi(av[1]), atoi(av[2]));
