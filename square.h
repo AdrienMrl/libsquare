@@ -12,12 +12,12 @@ enum type_e {
     LONG = sizeof(long)
 };
 
-enum direction_e {
+typedef enum direction_e {
     LEFT,
     RIGHT,
     UP,
     DOWN
-};
+} dir_t;
 
 typedef union {
     char ccell;

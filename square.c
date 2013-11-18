@@ -5,7 +5,7 @@
 #include <string.h>
 #include "square.h"
 
-char binary_print(cell_t cell)
+/* TODO: use more functions pointers typedefs */ char binary_print(cell_t cell)
 {
     return (cell.ccell ? '#' : '_');
 }
@@ -95,4 +95,25 @@ int      write_cell(grid_t grid, cell_t cell, int x, int y)
 	return (-1);
     GET_CELL(x, y) = cell;
     return (0);
+}
+
+bool     read_cell_direc(grid_t grid, int x, int y, bool (*cell_status)(cell_t cell), dir_t direction)
+{
+    /* TODO: add diagonales */
+    switch (direction)
+    {
+        case UP:
+            y--;
+            break;
+        case DOWN:
+            y++;
+            break;
+        case LEFT:
+            x--;
+            break;
+        case RIGHT:
+            x++;
+            break;
+    }
+    return (read_cell(grid, x, y, cell_status));
 }
