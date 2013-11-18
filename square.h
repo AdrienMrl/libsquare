@@ -12,6 +12,11 @@ enum type_e {
     LONG = sizeof(long)
 };
 
+typedef struct pos_t {
+    int x;
+    int y;
+} pos_t;
+
 typedef enum direction_e {
     LEFT,
     RIGHT,
@@ -63,15 +68,17 @@ grid_t    extend(grid_t old, int sizeX, int sizeY);
 int       grid_cpy(grid_t *dest, grid_t src);
 
 /* read a case : is it free ? */
-bool      read_cell(grid_t grid, int x, int y, bool (*cell_status)(cell_t cell));
+bool      read_cell(grid_t grid, pos_t pos, bool (*cell_status)(cell_t cell));
 
 /* attempt to write 'cell' in grid, but returns false if not possible */
-int      write_cell(grid_t grid, cell_t cell, int x, int y);
+int      write_cell(grid_t grid, cell_t cell, pos_t pos);
 
 /* attempt to read cell that is on the 'direction' side of the specified cell
  * */
-bool     read_cell_direc(grid_t grid, int x, int y, bool (*cell_status)(cell_t cell), dir_t direction);
+bool     read_cell_direc(grid_t grid, pos_t pos, bool (*cell_status)(cell_t cell), dir_t direction);
 
+/* attempt to read cell around one cell, in any direction */
+pos_t   read_cell_around(grid_t grid, pos_t pos, bool (*cell_status)(cell_t cell));
 /* }}} */
 
 #endif

@@ -20,6 +20,26 @@ bool always_true(cell_t cell)
     return (true);
 }
 
+pos_t  direction_pos(pos_t pos, dir_t direction)
+{
+    switch (direction)
+    {
+        case UP:
+            pos.y--;
+            break;
+        case DOWN:
+            pos.y++;
+            break;
+        case LEFT:
+            pos.x--;
+            break;
+        case RIGHT:
+            pos.x++;
+            break;
+    }
+    return (pos);
+}
+
 grid_t new_grid_type(int sizeX, int sizeY, enum type_e type)
 {
     grid_t buffer;
@@ -82,38 +102,37 @@ grid_t extend(grid_t old, int sizeX, int sizeY)
     return (buf);
 }
 
-bool read_cell(grid_t grid, int x, int y, bool (*cell_status)(cell_t cell))
+bool read_cell(grid_t grid, pos_t pos, bool (*cell_status)(cell_t cell))
 {
-    if (!IN_BOUND(grid, x, y))
+    if (!IN_BOUND(grid, pos.x, pos.y))
 	return (false);
-    return (cell_status(GET_CELL(x, y)));
+    return (cell_status(GET_CELL(pos.x, pos.y)));
 }
 
-int      write_cell(grid_t grid, cell_t cell, int x, int y)
+int      write_cell(grid_t grid, cell_t cell, pos_t pos)
 {
-    if (read_cell(grid, x, y, always_true) == false)
+    if (read_cell(grid, pos, always_true) == false)
 	return (-1);
-    GET_CELL(x, y) = cell;
+    GET_CELL(pos.x, pos.y) = cell;
     return (0);
 }
 
-bool     read_cell_direc(grid_t grid, int x, int y, bool (*cell_status)(cell_t cell), dir_t direction)
+bool     read_cell_direc(grid_t grid, pos_t position, bool (*cell_status)(cell_t cell), dir_t direction)
 {
     /* TODO: add diagonales */
-    switch (direction)
+    position = direction_pos(position, direction);
+    return (read_cell(grid, position, cell_status));
+}
+
+pos_t  read_cell_around(grid_t grid, pos_t position, bool (*cell_status)(cell_t cell))
+{
+    dir_t curr_direction = LEFT;
+
+    while (curr_direction <= DOWN)
     {
-        case UP:
-            y--;
-            break;
-        case DOWN:
-            y++;
-            break;
-        case LEFT:
-            x--;
-            break;
-        case RIGHT:
-            x++;
-            break;
+        if (read_cell_direc(grid, position, cell_status, curr_direction))
+            return (direction_pos(position, curr_direction));
+        curr_direction++;
     }
-    return (read_cell(grid, x, y, cell_status));
+    return ((pos_t){ -1, -1});
 }
